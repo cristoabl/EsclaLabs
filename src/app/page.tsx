@@ -105,8 +105,8 @@ const Navbar = () => {
               Nosotros
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-500 transition-all duration-300 group-hover:w-full" />
             </button>
-            <a href="mailto:cristobaldefy@gmail.com" className="relative group px-6 py-2.5 overflow-hidden rounded-xl bg-white text-black font-black transition-all hover:scale-105 active:scale-95 shadow-lg shadow-white/5">
-              <span className="relative z-10 flex items-center gap-2">
+            <a href="https://www.linkedin.com/in/cristobal-asis-485ab9122/" target="_blank" className="relative group px-6 py-2.5 overflow-hidden rounded-xl bg-white text-black font-black transition-all hover:scale-105 active:scale-95 shadow-lg shadow-white/5">
+              <span className="relative z-10 flex items-center gap-2 text-black text-sm uppercase font-black tracking-widest leading-none">
                 HABLEMOS <ChevronRight className="w-4 h-4" />
               </span>
               <div className="absolute inset-0 bg-cyan-400 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300" />
@@ -130,17 +130,18 @@ const Hero = () => {
 
   return (
     <section ref={containerRef} className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-black text-center">
-      {/* Premium Background (Video placeholder + fallback) */}
+      {/* Premium Background (Improved Video with absolute source) */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-black" />
+        <div className="absolute inset-0 bg-black z-[-1]" />
         <video 
           autoPlay 
           muted 
           loop 
           playsInline
-          className="w-full h-full object-cover opacity-20 grayscale contrast-125"
-          src="https://assets.mixkit.co/videos/preview/mixkit-circuit-board-animation-1568-large.mp4"
-        />
+          className="w-full h-full object-cover opacity-20 grayscale"
+        >
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-circuit-board-animation-1568-large.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_90%)]" />
       </div>
@@ -199,7 +200,7 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="flex flex-col md:flex-row items-center justify-center gap-8"
         >
-          <a href="mailto:cristobaldefy@gmail.com" className="group relative px-12 py-6 bg-white text-black rounded-2xl font-black text-2xl overflow-hidden transition-all hover:shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95 uppercase tracking-tighter italic">
+          <a href="https://www.linkedin.com/in/cristobal-asis-485ab9122/" target="_blank" className="group relative px-12 py-6 bg-white text-black rounded-2xl font-black text-2xl overflow-hidden transition-all hover:shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95 uppercase tracking-tighter italic">
             <span className="relative z-10 flex items-center gap-3 text-black">
               Quiero mi Consultoría <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
             </span>
@@ -246,7 +247,7 @@ const ServiceCard = ({ title, desc, icon: Icon, color, delay, image }: any) => {
           {desc}
         </p>
 
-        <a href="mailto:cristobaldefy@gmail.com" className="flex items-center gap-3 text-cyan-400 font-black text-sm uppercase tracking-widest opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
+        <a href="https://www.linkedin.com/in/cristobal-asis-485ab9122/" target="_blank" className="flex items-center gap-3 text-cyan-400 font-black text-sm uppercase tracking-widest opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
           Activar Protocolo <ExternalLink className="w-4 h-4" />
         </a>
       </div>
@@ -380,21 +381,6 @@ const Founder = () => {
               >
                 <Linkedin className="w-6 h-6 text-white" />
               </motion.a>
-              <motion.a 
-                whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.1)' }}
-                href="https://github.com/cristoabl" 
-                target="_blank"
-                className="w-16 h-16 rounded-2xl glass flex items-center justify-center border-white/5 transition-all shadow-lg"
-              >
-                <Github className="w-6 h-6 text-white" />
-              </motion.a>
-              <motion.a 
-                whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.1)' }}
-                href="mailto:cristobaldefy@gmail.com" 
-                className="w-16 h-16 rounded-2xl glass flex items-center justify-center border-white/5 transition-all shadow-lg"
-              >
-                <Mail className="w-6 h-6 text-white" />
-              </motion.a>
             </div>
           </motion.div>
         </div>
@@ -405,7 +391,7 @@ const Founder = () => {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-cyan-500 selection:text-black cursor-none overflow-x-hidden">
+    <div className="min-h-screen bg-black text-white selection:bg-cyan-500 selection:text-black cursor-none overflow-x-hidden font-sans">
       <CustomCursor />
       <Navbar />
       
@@ -461,14 +447,14 @@ export default function LandingPage() {
             <h2 className="text-7xl md:text-[9rem] font-black mb-12 italic tracking-tightest uppercase leading-[0.8]">
               ¿Listo para <br /> <span className="text-gradient">Ascender?</span>
             </h2>
-            <a href="mailto:cristobaldefy@gmail.com" className="px-16 py-8 bg-cyan-500 text-black rounded-3xl font-black text-3xl hover:scale-105 transition-all shadow-[0_0_60px_rgba(6,182,212,0.3)] italic uppercase flex items-center gap-6 mx-auto w-fit">
-              Iniciar Integración <Mail className="w-8 h-8" />
+            <a href="https://www.linkedin.com/in/cristobal-asis-485ab9122/" target="_blank" className="px-16 py-8 bg-cyan-500 text-black rounded-3xl font-black text-3xl hover:scale-105 transition-all shadow-[0_0_60px_rgba(6,182,212,0.3)] italic uppercase flex items-center gap-6 mx-auto w-fit leading-none">
+              Iniciar Integración <ArrowRight className="w-8 h-8" />
             </a>
           </motion.div>
         </section>
       </main>
 
-      <footer className="py-20 px-6 border-t border-white/5 text-center relative bg-neutral-950">
+      <footer className="py-20 px-6 border-t border-white/5 text-center relative bg-neutral-950 font-sans">
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-5xl font-black tracking-tightest mb-10 italic uppercase">EsclaLabs</div>
           <div className="w-20 h-1 bg-cyan-500 mx-auto mb-10" />
@@ -477,8 +463,8 @@ export default function LandingPage() {
           </p>
           <div className="flex justify-center gap-10 text-white/30 font-bold uppercase tracking-widest text-xs mb-14">
             <a href="https://www.linkedin.com/in/cristobal-asis-485ab9122/" target="_blank" className="hover:text-cyan-400 transition-colors">LinkedIn</a>
-            <a href="https://github.com/cristoabl" target="_blank" className="hover:text-cyan-400 transition-colors">Github</a>
-            <a href="mailto:cristobaldefy@gmail.com" className="hover:text-cyan-400 transition-colors">Contacto</a>
+            <span className="opacity-20 cursor-default">Github</span>
+            <span className="opacity-20 cursor-default">Contacto</span>
           </div>
           <p className="text-white/10 text-[10px] font-black uppercase tracking-[0.5em]">
             © 2026 EsclaLabs. Todos los derechos reservados. Diseñado para el futuro. 🧉
@@ -535,7 +521,7 @@ export default function LandingPage() {
           z-index: 9999;
           transform: translate3d(var(--dot-x), var(--dot-y), 0);
         }
-        h1, h2, h3, button {
+        h1, h2, h3, button, a {
           letter-spacing: -0.05em !important;
         }
       `}</style>

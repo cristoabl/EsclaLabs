@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, Cpu, Bot, BarChart3, Globe, Linkedin, Zap, ChevronDown } from 'lucide-react';
+import { ArrowRight, Cpu, Bot, BarChart3, Globe, Linkedin, Zap, ChevronDown, ChevronRight } from 'lucide-react';
 
 // --- Optimized Custom Cursor ---
 const CustomCursor = () => {

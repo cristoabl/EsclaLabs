@@ -212,11 +212,11 @@ export default function LandingPage() {
           <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-24 items-center">
             <div className="relative group">
               <div className="absolute inset-0 bg-cyan-500/10 blur-[120px] rounded-full group-hover:bg-cyan-500/20 transition-all" />
-              <div className="relative aspect-[4/5] rounded-[4rem] overflow-hidden border border-white/10 shadow-2xl shadow-black">
+              <div className="relative max-w-sm mx-auto aspect-[4/5] rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl shadow-black">
                 <img src="/founder.jpg" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt="J.C. Asís" />
-                <div className="absolute bottom-10 left-10 text-left">
-                  <p className="text-5xl font-black italic uppercase leading-none mb-2">J.C. ASÍS</p>
-                  <p className="text-cyan-400 font-bold uppercase tracking-[0.2em] text-sm italic">Founder & Architect</p>
+                <div className="absolute bottom-8 left-8 text-left">
+                  <p className="text-4xl font-black italic uppercase leading-none mb-1 text-white">J.C. ASÍS</p>
+                  <p className="text-cyan-400 font-bold uppercase tracking-[0.2em] text-xs italic">Founder & Architect</p>
                 </div>
               </div>
             </div>

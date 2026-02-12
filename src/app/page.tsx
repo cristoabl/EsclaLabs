@@ -67,6 +67,11 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <motion.nav 
       initial={{ y: -100 }}
@@ -75,7 +80,7 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-6">
         <div className={`flex items-center justify-between glass-morphism rounded-2xl px-6 py-3 transition-all duration-500 ${scrolled ? 'bg-black/80 backdrop-blur-xl border-white/10 shadow-2xl shadow-cyan-500/10' : 'bg-transparent border-transparent'}`}>
-          <div className="flex items-center gap-3 group cursor-pointer">
+          <div className="flex items-center gap-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <motion.div 
               whileHover={{ rotate: 180 }}
               className="w-10 h-10 bg-cyan-500 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.5)]"
@@ -88,22 +93,24 @@ const Navbar = () => {
           </div>
           
           <div className="hidden md:flex items-center gap-10 text-xs font-bold uppercase tracking-widest">
-            {['Servicios', 'Filosofía', 'Nosotros'].map((item) => (
-              <a 
-                key={item} 
-                href={`#${item.toLowerCase()}`} 
-                className="relative text-white/50 hover:text-white transition-colors group"
-              >
-                {item}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-500 transition-all duration-300 group-hover:w-full" />
-              </a>
-            ))}
-            <button className="relative group px-6 py-2.5 overflow-hidden rounded-xl bg-white text-black font-black transition-all hover:scale-105 active:scale-95 shadow-lg shadow-white/5">
+            <button onClick={() => scrollTo('servicios')} className="relative text-white/50 hover:text-white transition-colors group">
+              Servicios
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-500 transition-all duration-300 group-hover:w-full" />
+            </button>
+            <button onClick={() => scrollTo('filosofia')} className="relative text-white/50 hover:text-white transition-colors group">
+              Filosofía
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-500 transition-all duration-300 group-hover:w-full" />
+            </button>
+            <button onClick={() => scrollTo('nosotros')} className="relative text-white/50 hover:text-white transition-colors group">
+              Nosotros
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-500 transition-all duration-300 group-hover:w-full" />
+            </button>
+            <a href="mailto:cristobaldefy@gmail.com" className="relative group px-6 py-2.5 overflow-hidden rounded-xl bg-white text-black font-black transition-all hover:scale-105 active:scale-95 shadow-lg shadow-white/5">
               <span className="relative z-10 flex items-center gap-2">
                 HABLEMOS <ChevronRight className="w-4 h-4" />
               </span>
               <div className="absolute inset-0 bg-cyan-400 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300" />
-            </button>
+            </a>
           </div>
         </div>
       </div>
@@ -123,17 +130,17 @@ const Hero = () => {
 
   return (
     <section ref={containerRef} className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-black text-center">
-      {/* Premium Video Background */}
+      {/* Premium Background (Video placeholder + fallback) */}
       <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-black" />
         <video 
           autoPlay 
           muted 
           loop 
           playsInline
-          className="w-full h-full object-cover opacity-30 grayscale contrast-125"
-        >
-          <source src="https://cdn.pixabay.com/video/2021/04/12/70884-537443187_large.mp4" type="video/mp4" />
-        </video>
+          className="w-full h-full object-cover opacity-20 grayscale contrast-125"
+          src="https://assets.mixkit.co/videos/preview/mixkit-circuit-board-animation-1568-large.mp4"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_90%)]" />
       </div>
@@ -192,26 +199,18 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="flex flex-col md:flex-row items-center justify-center gap-8"
         >
-          <button className="group relative px-12 py-6 bg-white text-black rounded-2xl font-black text-2xl overflow-hidden transition-all hover:shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95 uppercase tracking-tighter italic">
-            <span className="relative z-10 flex items-center gap-3">
+          <a href="mailto:cristobaldefy@gmail.com" className="group relative px-12 py-6 bg-white text-black rounded-2xl font-black text-2xl overflow-hidden transition-all hover:shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95 uppercase tracking-tighter italic">
+            <span className="relative z-10 flex items-center gap-3 text-black">
               Quiero mi Consultoría <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
             </span>
             <div className="absolute inset-0 bg-cyan-400 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300" />
-          </button>
+          </a>
           
-          <button className="px-12 py-6 glass rounded-2xl font-black text-2xl hover:bg-white/10 transition-all border border-white/10 active:scale-95 uppercase tracking-tighter italic text-white/70">
+          <button onClick={() => document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' })} className="px-12 py-6 glass rounded-2xl font-black text-2xl hover:bg-white/10 transition-all border border-white/10 active:scale-95 uppercase tracking-tighter italic text-white/70">
             Ver Soluciones
           </button>
         </motion.div>
       </motion.div>
-
-      {/* Hero Visual Element */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2, delay: 1 }}
-        className="absolute bottom-[-20%] w-full h-[600px] bg-gradient-to-t from-cyan-500/20 to-transparent blur-[120px] pointer-events-none"
-      />
     </section>
   );
 };
@@ -247,9 +246,9 @@ const ServiceCard = ({ title, desc, icon: Icon, color, delay, image }: any) => {
           {desc}
         </p>
 
-        <div className="flex items-center gap-3 text-cyan-400 font-black text-sm uppercase tracking-widest opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
+        <a href="mailto:cristobaldefy@gmail.com" className="flex items-center gap-3 text-cyan-400 font-black text-sm uppercase tracking-widest opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
           Activar Protocolo <ExternalLink className="w-4 h-4" />
-        </div>
+        </a>
       </div>
     </motion.div>
   );
@@ -373,16 +372,29 @@ const Founder = () => {
             </div>
             
             <div className="flex items-center gap-4">
-              {[Twitter, Linkedin, Github].map((Icon, i) => (
-                <motion.a 
-                  key={i}
-                  whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.1)' }}
-                  href="#" 
-                  className="w-16 h-16 rounded-2xl glass flex items-center justify-center border-white/5 transition-all shadow-lg"
-                >
-                  <Icon className="w-6 h-6 text-white" />
-                </motion.a>
-              ))}
+              <motion.a 
+                whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.1)' }}
+                href="https://www.linkedin.com/in/cristobal-asis-485ab9122/" 
+                target="_blank"
+                className="w-16 h-16 rounded-2xl glass flex items-center justify-center border-white/5 transition-all shadow-lg"
+              >
+                <Linkedin className="w-6 h-6 text-white" />
+              </motion.a>
+              <motion.a 
+                whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.1)' }}
+                href="https://github.com/cristoabl" 
+                target="_blank"
+                className="w-16 h-16 rounded-2xl glass flex items-center justify-center border-white/5 transition-all shadow-lg"
+              >
+                <Github className="w-6 h-6 text-white" />
+              </motion.a>
+              <motion.a 
+                whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.1)' }}
+                href="mailto:cristobaldefy@gmail.com" 
+                className="w-16 h-16 rounded-2xl glass flex items-center justify-center border-white/5 transition-all shadow-lg"
+              >
+                <Mail className="w-6 h-6 text-white" />
+              </motion.a>
             </div>
           </motion.div>
         </div>
@@ -418,7 +430,7 @@ export default function LandingPage() {
         <Services />
         
         {/* Filosofía / Middle Section */}
-        <section className="py-40 px-6 bg-white/[0.01]">
+        <section id="filosofia" className="py-40 px-6 bg-white/[0.01]">
           <div className="max-w-4xl mx-auto text-center">
              <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
@@ -449,9 +461,9 @@ export default function LandingPage() {
             <h2 className="text-7xl md:text-[9rem] font-black mb-12 italic tracking-tightest uppercase leading-[0.8]">
               ¿Listo para <br /> <span className="text-gradient">Ascender?</span>
             </h2>
-            <button className="px-16 py-8 bg-cyan-500 text-black rounded-3xl font-black text-3xl hover:scale-105 transition-all shadow-[0_0_60px_rgba(6,182,212,0.3)] italic uppercase flex items-center gap-6 mx-auto">
+            <a href="mailto:cristobaldefy@gmail.com" className="px-16 py-8 bg-cyan-500 text-black rounded-3xl font-black text-3xl hover:scale-105 transition-all shadow-[0_0_60px_rgba(6,182,212,0.3)] italic uppercase flex items-center gap-6 mx-auto w-fit">
               Iniciar Integración <Mail className="w-8 h-8" />
-            </button>
+            </a>
           </motion.div>
         </section>
       </main>
@@ -464,10 +476,9 @@ export default function LandingPage() {
             Arquitectando la frontera de las finanzas digitales y la inteligencia autónoma.
           </p>
           <div className="flex justify-center gap-10 text-white/30 font-bold uppercase tracking-widest text-xs mb-14">
-            <a href="#" className="hover:text-cyan-400 transition-colors">Twitter</a>
-            <a href="#" className="hover:text-cyan-400 transition-colors">LinkedIn</a>
-            <a href="#" className="hover:text-cyan-400 transition-colors">Github</a>
-            <a href="#" className="hover:text-cyan-400 transition-colors">Contacto</a>
+            <a href="https://www.linkedin.com/in/cristobal-asis-485ab9122/" target="_blank" className="hover:text-cyan-400 transition-colors">LinkedIn</a>
+            <a href="https://github.com/cristoabl" target="_blank" className="hover:text-cyan-400 transition-colors">Github</a>
+            <a href="mailto:cristobaldefy@gmail.com" className="hover:text-cyan-400 transition-colors">Contacto</a>
           </div>
           <p className="text-white/10 text-[10px] font-black uppercase tracking-[0.5em]">
             © 2026 EsclaLabs. Todos los derechos reservados. Diseñado para el futuro. 🧉

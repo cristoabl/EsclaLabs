@@ -120,6 +120,7 @@ const Navbar = () => {
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
@@ -128,22 +129,38 @@ const Hero = () => {
   const y = useTransform(scrollYProgress, [0, 1], [0, 300]);
   const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(error => {
+        console.log("Video autoplay failed:", error);
+      });
+    }
+  }, []);
+
   return (
     <section ref={containerRef} className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-black text-center">
-      {/* Premium Background (Improved Video with absolute source) */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-black z-[-1]" />
+      {/* Premium Background (Improved Video handling) */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
         <video 
+          ref={videoRef}
           autoPlay 
           muted 
           loop 
           playsInline
-          className="w-full h-full object-cover opacity-20 grayscale"
+          className="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-110"
         >
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-circuit-board-animation-1568-large.mp4" type="video/mp4" />
+          <source src="https://cdn.pixabay.com/video/2020/09/25/51214-464871404_large.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_90%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_95%)]" />
+        
+        {/* CSS Animated Grid (Fallback/Overlay) */}
+        <div className="absolute inset-0 opacity-20" 
+             style={{ 
+               backgroundImage: 'linear-gradient(#ffffff05 1px, transparent 1px), linear-gradient(90deg, #ffffff05 1px, transparent 1px)',
+               backgroundSize: '40px 40px' 
+             }} 
+        />
       </div>
       
       {/* Animated Glows */}
@@ -160,13 +177,13 @@ const Hero = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-white/10 glass mb-10 premium-border"
+          className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-white/10 glass mb-10 premium-border shadow-xl shadow-cyan-500/5"
         >
           <span className="w-2 h-2 rounded-full bg-cyan-500 animate-ping" />
           <span className="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-400">Próxima Generación de Ingeniería Financiera</span>
         </motion.div>
 
-        <h1 className="text-6xl md:text-[9rem] font-black tracking-tightest mb-10 leading-[0.85] text-white uppercase italic">
+        <h1 className="text-6xl md:text-[9.5rem] font-black tracking-tightest mb-10 leading-[0.85] text-white uppercase italic">
           <motion.span 
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -191,7 +208,7 @@ const Hero = () => {
           transition={{ duration: 1, delay: 0.5 }}
           className="text-white/60 text-xl md:text-3xl max-w-4xl mx-auto mb-14 leading-tight font-medium"
         >
-          Arquitectamos sistemas de alta escala uniendo la <span className="text-white">Precisión Contable</span> con el poder de la <span className="text-white">Inteligencia Artificial</span>.
+          Arquitectamos sistemas de alta escala uniendo la <span className="text-white font-bold italic underline decoration-cyan-500/50">Precisión Contable</span> con el poder de la <span className="text-white font-bold italic underline decoration-blue-500/50">Inteligencia Artificial</span>.
         </motion.p>
 
         <motion.div 
@@ -223,7 +240,7 @@ const ServiceCard = ({ title, desc, icon: Icon, color, delay, image }: any) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, delay }}
-      className="group relative h-[550px] rounded-[3.5rem] overflow-hidden bg-neutral-950 border border-white/5 premium-border"
+      className="group relative h-[550px] rounded-[3.5rem] overflow-hidden bg-neutral-950 border border-white/5 premium-border shadow-2xl"
     >
       <div className="absolute inset-0">
         <img 
@@ -235,7 +252,7 @@ const ServiceCard = ({ title, desc, icon: Icon, color, delay, image }: any) => {
       </div>
       
       <div className="relative h-full p-10 flex flex-col justify-end">
-        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 glass border-white/10 group-hover:scale-110 group-hover:border-cyan-500/50 transition-all duration-500 shadow-xl shadow-black/50`}>
+        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 glass border-white/10 group-hover:scale-110 group-hover:border-cyan-500/50 transition-all duration-500 shadow-xl shadow-black/50 shadow-inner`}>
           <Icon className="w-8 h-8 text-white" />
         </div>
         
@@ -336,7 +353,7 @@ const Founder = () => {
                  whileInView={{ width: '100%' }}
                  className="h-1 bg-cyan-500 mb-6" 
                />
-               <p className="text-5xl font-black italic tracking-tighter uppercase text-white mb-2">J.C. ASÍS</p>
+               <p className="text-5xl font-black italic tracking-tighter uppercase text-white mb-2 leading-none">J.C. ASÍS</p>
                <p className="text-cyan-400 font-bold uppercase tracking-[0.2em] text-sm">Founder & Architect</p>
             </div>
           </div>
@@ -348,8 +365,8 @@ const Founder = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-white/20 font-black uppercase tracking-[0.5em] text-xs block mb-8">El Factor Humano</span>
-            <h2 className="text-6xl md:text-7xl font-black mb-10 italic leading-[0.9] tracking-tightest uppercase">
+            <span className="text-white/20 font-black uppercase tracking-[0.5em] text-xs block mb-8 underline decoration-white/20 underline-offset-8">El Factor Humano</span>
+            <h2 className="text-6xl md:text-[5.5rem] font-black mb-10 italic leading-[0.8] tracking-tightest uppercase">
               Maña + <br />
               <span className="text-cyan-500">Ingeniería.</span>
             </h2>
@@ -361,13 +378,13 @@ const Founder = () => {
               Juan Cristóbal Asís es Contador Público (2015) con un ADN puramente tecnológico. Resolutivo por naturaleza, navega el ecosistema Cripto desde 2017 y hoy lidera el desarrollo de agentes de IA aplicados a la rentabilidad empresarial.
             </p>
 
-            <div className="grid grid-cols-2 gap-10 mb-14">
+            <div className="grid grid-cols-2 gap-10 mb-14 border-t border-white/5 pt-10">
               <div>
-                <p className="text-4xl font-black text-white mb-2 italic">2017</p>
+                <p className="text-4xl font-black text-white mb-2 italic tracking-tighter">2017</p>
                 <p className="text-white/30 uppercase text-[10px] tracking-widest font-bold">Incepción On-chain</p>
               </div>
               <div>
-                <p className="text-4xl font-black text-white mb-2 italic">1k+</p>
+                <p className="text-4xl font-black text-white mb-2 italic tracking-tighter">1k+</p>
                 <p className="text-white/30 uppercase text-[10px] tracking-widest font-bold">Lotes Gestionados</p>
               </div>
             </div>
@@ -381,6 +398,8 @@ const Founder = () => {
               >
                 <Linkedin className="w-6 h-6 text-white" />
               </motion.a>
+              <div className="w-px h-10 bg-white/10 mx-2" />
+              <span className="text-white/20 text-xs font-bold uppercase tracking-[0.3em] italic">Redes Verificadas</span>
             </div>
           </motion.div>
         </div>
@@ -399,13 +418,14 @@ export default function LandingPage() {
         <Hero />
         
         {/* Ticker Infinito */}
-        <div className="py-10 border-y border-white/5 bg-black relative overflow-hidden">
+        <div className="py-12 border-y border-white/5 bg-black relative overflow-hidden">
           <div className="flex whitespace-nowrap animate-infinite-scroll">
             {[1, 2, 3, 4, 5, 6].map(i => (
               <div key={i} className="flex items-center gap-20 mx-10">
                 <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Maña</span>
                 <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Eficiencia</span>
-                <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Resolución</span>
+                <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest text-cyan-500/10">EsclaLabs</span>
+                <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest text-white/5">Resolución</span>
                 <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Soberanía</span>
                 <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Escalabilidad</span>
               </div>
@@ -416,8 +436,9 @@ export default function LandingPage() {
         <Services />
         
         {/* Filosofía / Middle Section */}
-        <section id="filosofia" className="py-40 px-6 bg-white/[0.01]">
-          <div className="max-w-4xl mx-auto text-center">
+        <section id="filosofia" className="py-40 px-6 bg-white/[0.01] relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.05),transparent_70%)]" />
+          <div className="max-w-4xl mx-auto text-center relative z-10">
              <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -425,8 +446,8 @@ export default function LandingPage() {
              >
                 <Bot className="w-16 h-16 text-cyan-500" />
              </motion.div>
-             <h2 className="text-4xl md:text-7xl font-black mb-10 uppercase italic tracking-tighter">
-                Cambiamos <span className="text-cyan-500">Horas Culo</span> por <span className="text-white">Algoritmos.</span>
+             <h2 className="text-4xl md:text-[5.5rem] font-black mb-10 uppercase italic tracking-tighter leading-none">
+                Cambiamos <span className="text-cyan-500">Horas Culo</span> <br /> por <span className="text-white">Algoritmos.</span>
              </h2>
              <p className="text-white/40 text-xl md:text-2xl leading-relaxed font-medium">
                 No vendemos software, vendemos el final de la burocracia. Si un bot puede hacerlo mejor, más rápido y sin quejarse, EsclaLabs lo construye.
@@ -444,7 +465,7 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, scale: 1 }}
             className="max-w-4xl mx-auto relative z-10"
           >
-            <h2 className="text-7xl md:text-[9rem] font-black mb-12 italic tracking-tightest uppercase leading-[0.8]">
+            <h2 className="text-7xl md:text-[9rem] font-black mb-12 italic tracking-tightest uppercase leading-[0.8] tracking-tighter">
               ¿Listo para <br /> <span className="text-gradient">Ascender?</span>
             </h2>
             <a href="https://www.linkedin.com/in/cristobal-asis-485ab9122/" target="_blank" className="px-16 py-8 bg-cyan-500 text-black rounded-3xl font-black text-3xl hover:scale-105 transition-all shadow-[0_0_60px_rgba(6,182,212,0.3)] italic uppercase flex items-center gap-6 mx-auto w-fit leading-none">
@@ -463,8 +484,8 @@ export default function LandingPage() {
           </p>
           <div className="flex justify-center gap-10 text-white/30 font-bold uppercase tracking-widest text-xs mb-14">
             <a href="https://www.linkedin.com/in/cristobal-asis-485ab9122/" target="_blank" className="hover:text-cyan-400 transition-colors">LinkedIn</a>
-            <span className="opacity-20 cursor-default">Github</span>
-            <span className="opacity-20 cursor-default">Contacto</span>
+            <span className="opacity-20 cursor-default line-through">Github</span>
+            <span className="opacity-20 cursor-default line-through">Contacto</span>
           </div>
           <p className="text-white/10 text-[10px] font-black uppercase tracking-[0.5em]">
             © 2026 EsclaLabs. Todos los derechos reservados. Diseñado para el futuro. 🧉
@@ -523,6 +544,11 @@ export default function LandingPage() {
         }
         h1, h2, h3, button, a {
           letter-spacing: -0.05em !important;
+        }
+        .glass {
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.05);
         }
       `}</style>
     </div>

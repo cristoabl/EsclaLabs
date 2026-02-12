@@ -2,7 +2,61 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Bot, Cpu, TrendingUp, ShieldCheck, Globe, Zap, BarChart3, ChevronRight, Github, Twitter, Linkedin } from 'lucide-react';
+import { ArrowRight, Bot, Cpu, TrendingUp, ShieldCheck, Globe, Zap, BarChart3, ChevronRight, Github, Twitter, Linkedin, ExternalLink, Play } from 'lucide-react';
+
+// --- Optimized Custom Cursor ---
+
+const CustomCursor = () => {
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
+  const mousePos = useRef({ x: 0, y: 0 });
+  const cursorPos = useRef({ x: 0, y: 0 });
+  const dotPos = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mousePos.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const animate = () => {
+      // Smooth interpolation for the large circle
+      const lerpCursor = 0.15;
+      cursorPos.current.x += (mousePos.current.x - cursorPos.current.x) * lerpCursor;
+      cursorPos.current.y += (mousePos.current.y - cursorPos.current.y) * lerpCursor;
+
+      // Faster interpolation for the dot
+      const lerpDot = 0.4;
+      dotPos.current.x += (mousePos.current.x - dotPos.current.x) * lerpDot;
+      dotPos.current.y += (mousePos.current.y - dotPos.current.y) * lerpDot;
+
+      if (cursorRef.current) {
+        cursorRef.current.style.setProperty('--cursor-x', `${cursorPos.current.x - 16}px`);
+        cursorRef.current.style.setProperty('--cursor-y', `${cursorPos.current.y - 16}px`);
+      }
+      if (dotRef.current) {
+        dotRef.current.style.setProperty('--dot-x', `${dotPos.current.x - 3}px`);
+        dotRef.current.style.setProperty('--dot-y', `${dotPos.current.y - 3}px`);
+      }
+
+      requestAnimationFrame(animate);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    const animationFrame = requestAnimationFrame(animate);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationFrame);
+    };
+  }, []);
+
+  return (
+    <>
+      <div ref={cursorRef} className="custom-cursor hidden md:block" />
+      <div ref={dotRef} className="custom-cursor-dot hidden md:block" />
+    </>
+  );
+};
 
 // --- Custom Components ---
 
@@ -22,7 +76,7 @@ const Navbar = () => {
       className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? 'py-4' : 'py-8'}`}
     >
       <div className="max-w-7xl mx-auto px-6">
-        <div className={`flex items-center justify-between glass-morphism rounded-2xl px-6 py-3 transition-all duration-500 ${scrolled ? 'bg-black/80 backdrop-blur-xl' : 'bg-transparent border-transparent'}`}>
+        <div className={`flex items-center justify-between glass-morphism rounded-2xl px-6 py-3 transition-all duration-500 ${scrolled ? 'bg-black/80 backdrop-blur-xl border-white/10' : 'bg-transparent border-transparent'}`}>
           <div className="flex items-center gap-3 group cursor-pointer">
             <motion.div 
               whileHover={{ rotate: 180 }}
@@ -30,25 +84,25 @@ const Navbar = () => {
             >
               <Cpu className="text-black w-6 h-6" />
             </motion.div>
-            <span className="text-xl font-bold tracking-tighter text-white group-hover:text-cyan-400 transition-colors">
+            <span className="text-2xl font-black tracking-tighter text-white group-hover:text-cyan-400 transition-colors uppercase">
               EsclaLabs
             </span>
           </div>
           
-          <div className="hidden md:flex items-center gap-10 text-sm font-medium">
+          <div className="hidden md:flex items-center gap-10 text-xs font-bold uppercase tracking-widest">
             {['Servicios', 'Impacto', 'Nosotros'].map((item) => (
               <a 
                 key={item} 
                 href={`#${item.toLowerCase()}`} 
-                className="relative text-white/70 hover:text-white transition-colors group"
+                className="relative text-white/50 hover:text-white transition-colors group"
               >
                 {item}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-500 transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
-            <button className="relative group px-6 py-2.5 overflow-hidden rounded-full bg-white text-black font-bold transition-all hover:scale-105 active:scale-95">
+            <button className="relative group px-6 py-2.5 overflow-hidden rounded-xl bg-white text-black font-black transition-all hover:scale-105 active:scale-95">
               <span className="relative z-10 flex items-center gap-2">
-                Consultoría <ChevronRight className="w-4 h-4" />
+                ESTRATEGIA <ChevronRight className="w-4 h-4" />
               </span>
               <div className="absolute inset-0 bg-cyan-400 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300" />
             </button>
@@ -66,63 +120,62 @@ const Hero = () => {
     offset: ["start start", "end start"]
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 300]);
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
-    <section ref={containerRef} className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-dot-pattern">
-      <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/10 via-transparent to-black" />
+    <section ref={containerRef} className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-black">
+      {/* Premium Video Background */}
+      <div className="absolute inset-0 z-0">
+        <video 
+          autoPlay 
+          muted 
+          loop 
+          playsInline
+          className="w-full h-full object-cover opacity-40 grayscale"
+        >
+          <source src="https://cdn.pixabay.com/video/2021/04/12/70884-537443187_large.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/40 to-black" />
+        <div className="absolute inset-0 bg-grid-white opacity-10" />
+      </div>
       
-      {/* Animated background elements */}
+      {/* Animated Glows */}
       <motion.div 
         animate={{ 
           scale: [1, 1.2, 1],
           opacity: [0.3, 0.5, 0.3],
-          x: [0, 100, 0],
-          y: [0, -50, 0]
         }}
         transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-        className="absolute top-1/4 -left-1/4 w-[500px] h-[500px] bg-cyan-500/20 blur-[120px] rounded-full" 
-      />
-      <motion.div 
-        animate={{ 
-          scale: [1, 1.5, 1],
-          opacity: [0.2, 0.4, 0.2],
-          x: [0, -100, 0],
-          y: [0, 100, 0]
-        }}
-        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-        className="absolute bottom-1/4 -right-1/4 w-[600px] h-[600px] bg-blue-600/10 blur-[120px] rounded-full" 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-500/10 blur-[150px] rounded-full pointer-events-none" 
       />
 
-      <motion.div style={{ y, opacity, scale }} className="relative z-10 max-w-7xl mx-auto px-6 text-center">
+      <motion.div style={{ y, opacity }} className="relative z-10 max-w-7xl mx-auto px-6 text-center">
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 glass mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-white/10 glass mb-10 premium-border"
         >
-          <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-white/60">The Future of Finance & AI</span>
+          <span className="w-2 h-2 rounded-full bg-cyan-500 animate-ping" />
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-400">Next Gen Financial Engineering</span>
         </motion.div>
 
-        <h1 className="text-6xl md:text-9xl font-bold tracking-tightest mb-8 leading-[0.9] text-white">
+        <h1 className="text-7xl md:text-[10rem] font-black tracking-tightest mb-10 leading-[0.8] text-white uppercase italic">
           <motion.span 
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
             className="block"
           >
-            Evolutionary
+            Extreme
           </motion.span>
           <motion.span 
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="block text-gradient"
           >
-            Intelligence.
+            Intelligence
           </motion.span>
         </h1>
 
@@ -130,82 +183,75 @@ const Hero = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="text-white/50 text-xl md:text-2xl max-w-3xl mx-auto mb-12 leading-relaxed font-light"
+          className="text-white/60 text-xl md:text-3xl max-w-4xl mx-auto mb-14 leading-tight font-medium"
         >
-          EsclaLabs fusiona algoritmos de IA avanzada con el ecosistema cripto para potenciar empresas que buscan dominar el próximo ciclo económico.
+          We architect hyper-scalable systems at the intersection of <span className="text-white">Neural Networks</span> and <span className="text-white">On-chain Finance</span>.
         </motion.p>
 
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-col md:flex-row items-center justify-center gap-6"
+          className="flex flex-col md:flex-row items-center justify-center gap-8"
         >
-          <button className="group relative px-10 py-5 bg-cyan-500 text-black rounded-2xl font-black text-xl overflow-hidden transition-all hover:shadow-[0_0_40px_rgba(6,182,212,0.4)] hover:scale-105 active:scale-95">
+          <button className="group relative px-12 py-6 bg-white text-black rounded-2xl font-black text-2xl overflow-hidden transition-all hover:shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95 uppercase tracking-tighter italic">
             <span className="relative z-10 flex items-center gap-3">
-              EMPEZAR AHORA <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+              Deploy Protocol <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
             </span>
-            <div className="absolute inset-0 bg-white translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300" />
+            <div className="absolute inset-0 bg-cyan-400 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300" />
           </button>
           
-          <button className="px-10 py-5 glass rounded-2xl font-bold text-xl hover:bg-white/10 transition-all border border-white/10 active:scale-95">
-            Ver Lab
+          <button className="px-12 py-6 glass rounded-2xl font-black text-2xl hover:bg-white/10 transition-all border border-white/10 active:scale-95 uppercase tracking-tighter italic text-white/70">
+            View Analytics
           </button>
         </motion.div>
       </motion.div>
 
-      {/* Hero 3D Card / Element */}
+      {/* Hero Visual Element */}
       <motion.div 
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.2, delay: 0.8, ease: "circOut" }}
-        className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-full max-w-5xl h-[400px] perspective-1000 hidden lg:block"
-      >
-        <motion.div 
-          animate={{ 
-            rotateX: [15, 20, 15],
-            y: [0, -20, 0]
-          }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="w-full h-full glass-morphism rounded-t-[4rem] border-t border-x border-white/20 p-8 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] bg-gradient-to-t from-black to-white/5"
-        >
-          <div className="grid grid-cols-3 gap-6 h-full">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="rounded-3xl bg-white/5 animate-pulse" />
-            ))}
-          </div>
-        </motion.div>
-      </motion.div>
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2, delay: 1 }}
+        className="absolute bottom-[-20%] w-full h-[600px] bg-gradient-to-t from-cyan-500/20 to-transparent blur-[120px] pointer-events-none"
+      />
     </section>
   );
 };
 
-const ServiceCard = ({ title, desc, icon: Icon, color, delay }: any) => {
+const ServiceCard = ({ title, desc, icon: Icon, color, delay, image }: any) => {
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, delay }}
-      whileHover={{ y: -10, scale: 1.02 }}
-      className="group relative p-8 rounded-[2.5rem] bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.05] hover:border-white/20 transition-all duration-500 overflow-hidden"
+      transition={{ duration: 0.8, delay }}
+      className="group relative h-[500px] rounded-[3rem] overflow-hidden bg-neutral-950 border border-white/5 premium-border"
     >
-      <div className={`absolute top-0 right-0 w-32 h-32 blur-[60px] opacity-0 group-hover:opacity-20 transition-opacity duration-500 ${color}`} />
-      
-      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-8 glass group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500`}>
-        <Icon className="w-8 h-8 text-white" />
+      <div className="absolute inset-0">
+        <img 
+          src={image} 
+          alt={title}
+          className="w-full h-full object-cover opacity-20 group-hover:opacity-40 group-hover:scale-110 transition-all duration-700"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
       </div>
       
-      <h3 className="text-3xl font-bold mb-4 tracking-tight group-hover:text-cyan-400 transition-colors">
-        {title}
-      </h3>
-      
-      <p className="text-white/40 text-lg leading-relaxed mb-8 group-hover:text-white/60 transition-colors">
-        {desc}
-      </p>
+      <div className="relative h-full p-10 flex flex-col justify-end">
+        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 glass border-white/10 group-hover:scale-110 group-hover:border-cyan-500/50 transition-all duration-500`}>
+          <Icon className="w-6 h-6 text-white" />
+        </div>
+        
+        <h3 className="text-4xl font-black mb-4 tracking-tighter uppercase italic text-white">
+          {title}
+        </h3>
+        
+        <p className="text-white/40 text-lg leading-snug mb-8 group-hover:text-white/70 transition-colors">
+          {desc}
+        </p>
 
-      <div className="flex items-center gap-2 text-white font-bold group-hover:gap-4 transition-all">
-        Saber más <ChevronRight className="w-5 h-5 text-cyan-500" />
+        <div className="flex items-center gap-3 text-cyan-400 font-black text-sm uppercase tracking-widest opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
+          Init Protocol <ExternalLink className="w-4 h-4" />
+        </div>
       </div>
     </motion.div>
   );
@@ -213,63 +259,51 @@ const ServiceCard = ({ title, desc, icon: Icon, color, delay }: any) => {
 
 const Services = () => {
   return (
-    <section id="servicios" className="py-32 px-6 relative overflow-hidden">
+    <section id="servicios" className="py-40 px-6 relative bg-black">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-20">
-          <motion.h2 
+        <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-10">
+          <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-7xl font-bold mb-6"
           >
-            Engineering <br />
-            <span className="text-white/30">The New Economy.</span>
-          </motion.h2>
-          <div className="w-32 h-1.5 bg-cyan-500 rounded-full" />
+            <span className="text-cyan-500 font-black uppercase tracking-[0.4em] text-sm block mb-4">Core Capabilities</span>
+            <h2 className="text-6xl md:text-[6rem] font-black leading-[0.8] tracking-tightest uppercase italic">
+              Modular <br />
+              <span className="text-white/20">Solutions.</span>
+            </h2>
+          </motion.div>
+          
+          <motion.p 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="text-white/40 text-xl max-w-md text-right font-medium"
+          >
+            Desplegamos infraestructura de nivel institucional diseñada para la velocidad y la soberanía algorítmica.
+          </motion.p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <ServiceCard 
-            title="AI Orchestration" 
-            desc="Sistemas autónomos que gestionan flujos de trabajo, atención al cliente y decisiones operativas en tiempo real."
+            title="Neural Nets" 
+            desc="Modelos de lenguaje y visión entrenados para automatización radical de flujos empresariales."
             icon={Bot}
-            color="bg-cyan-500"
+            image="https://images.unsplash.com/photo-1620712943543-bcc4628c6757?auto=format&fit=crop&q=80&w=1000"
             delay={0.1}
           />
           <ServiceCard 
-            title="Crypto Yield" 
-            desc="Estrategias institucionales de tesorería on-chain para maximizar rendimientos con riesgo controlado."
+            title="Yield Engine" 
+            desc="Algoritmos de alta frecuencia para gestión de tesorería y arbitraje en ecosistemas DeFi."
             icon={TrendingUp}
-            color="bg-blue-500"
+            image="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=1000"
             delay={0.2}
           />
           <ServiceCard 
-            title="FinOps Lab" 
-            desc="Auditoría y optimización de costos financieros mediante modelos predictivos de inteligencia artificial."
+            title="Quantum Ops" 
+            desc="Optimización matemática de procesos financieros reduciendo latencia y costos operativos."
             icon={BarChart3}
-            color="bg-purple-500"
+            image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000"
             delay={0.3}
-          />
-          <ServiceCard 
-            title="Web3 Infra" 
-            desc="Despliegue de nodos, validadores e infraestructura segura para empresas que operan en blockchain."
-            icon={Globe}
-            color="bg-green-500"
-            delay={0.4}
-          />
-          <ServiceCard 
-            title="Cyber Security" 
-            desc="Protección de activos digitales y auditoría de contratos inteligentes para prevenir vulnerabilidades."
-            icon={ShieldCheck}
-            color="bg-red-500"
-            delay={0.5}
-          />
-          <ServiceCard 
-            title="Custom Models" 
-            desc="Entrenamiento de LLMs con datos privados de tu empresa para una inteligencia 100% a medida."
-            icon={Zap}
-            color="bg-yellow-500"
-            delay={0.6}
           />
         </div>
       </div>
@@ -279,49 +313,72 @@ const Services = () => {
 
 const Founder = () => {
   return (
-    <section id="nosotros" className="py-32 px-6 bg-white/[0.02]">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
+    <section id="nosotros" className="py-40 px-6 relative overflow-hidden bg-neutral-950">
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-32 items-center">
         <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          className="relative aspect-square max-w-md mx-auto lg:mx-0"
+          className="relative group"
         >
-          <div className="absolute inset-0 bg-cyan-500/20 blur-[100px] rounded-full animate-pulse" />
-          <div className="relative w-full h-full rounded-[3rem] overflow-hidden border border-white/10 glass">
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10" />
-            <div className="w-full h-full bg-neutral-900 flex items-center justify-center">
-               <span className="text-8xl font-black text-white/10">JCA</span>
-            </div>
-            <div className="absolute bottom-8 left-8 z-20">
-               <p className="text-2xl font-bold">Juan Cristóbal Asís</p>
-               <p className="text-cyan-500 font-medium">Founder & Managing Partner</p>
+          <div className="absolute inset-0 bg-cyan-500/20 blur-[120px] rounded-full group-hover:bg-cyan-500/30 transition-all duration-700" />
+          <div className="relative aspect-[4/5] rounded-[4rem] overflow-hidden border border-white/10 premium-border">
+            <img 
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=1000" 
+              alt="Juan Cristóbal Asís" 
+              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+            
+            <div className="absolute bottom-12 left-12">
+               <motion.div 
+                 initial={{ width: 0 }}
+                 whileInView={{ width: '100%' }}
+                 className="h-1 bg-cyan-500 mb-6" 
+               />
+               <p className="text-5xl font-black italic tracking-tighter uppercase text-white mb-2">J.C. ASÍS</p>
+               <p className="text-cyan-400 font-bold uppercase tracking-[0.2em] text-sm">Visionary / Founder</p>
             </div>
           </div>
         </motion.div>
 
         <div>
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-5xl font-bold mb-8 italic leading-tight">
-              "No estamos construyendo solo software, estamos diseñando la infraestructura de la próxima década."
+            <span className="text-white/20 font-black uppercase tracking-[0.5em] text-xs block mb-8">The Philosophy</span>
+            <h2 className="text-6xl md:text-7xl font-black mb-10 italic leading-[0.9] tracking-tightest uppercase">
+              Beyond <br />
+              <span className="text-cyan-500">Automation.</span>
             </h2>
-            <p className="text-white/50 text-xl leading-relaxed mb-12">
-              Contador de formación, tecnólogo por vocación. Juan Cristóbal combina la precisión del mundo financiero tradicional con la velocidad y disrupción de Crypto e IA. Desde 2017, ha liderado transformaciones digitales que hoy son el estándar de la industria.
+            <p className="text-white/50 text-2xl leading-relaxed mb-14 font-medium italic">
+              "No estamos construyendo solo software, estamos diseñando la infraestructura de la próxima década donde la IA y el capital son indistinguibles."
             </p>
             
-            <div className="flex items-center gap-6">
+            <div className="grid grid-cols-2 gap-10 mb-14">
+              <div>
+                <p className="text-4xl font-black text-white mb-2 italic">2017</p>
+                <p className="text-white/30 uppercase text-xs tracking-widest font-bold">Inception on-chain</p>
+              </div>
+              <div>
+                <p className="text-4xl font-black text-white mb-2 italic">40M+</p>
+                <p className="text-white/30 uppercase text-xs tracking-widest font-bold">Assets Optimized</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4">
               {[Twitter, Linkedin, Github].map((Icon, i) => (
                 <motion.a 
                   key={i}
-                  whileHover={{ y: -5, color: '#06b6d4' }}
+                  whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.1)' }}
                   href="#" 
-                  className="p-4 rounded-2xl glass hover:border-cyan-500 transition-all"
+                  className="w-16 h-16 rounded-2xl glass flex items-center justify-center border-white/5 transition-all"
                 >
-                  <Icon className="w-6 h-6" />
+                  <Icon className="w-6 h-6 text-white" />
                 </motion.a>
               ))}
             </div>
@@ -333,60 +390,77 @@ const Founder = () => {
 };
 
 export default function LandingPage() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-cyan-500 selection:text-black cursor-none">
-      {/* Custom Cursor */}
-      <motion.div 
-        className="fixed top-0 left-0 w-8 h-8 rounded-full bg-cyan-500/30 border border-cyan-500 z-[9999] pointer-events-none mix-blend-difference"
-        animate={{ 
-          x: mousePos.x - 16, 
-          y: mousePos.y - 16,
-          scale: 1
-        }}
-        transition={{ type: 'spring', damping: 20, stiffness: 250, mass: 0.5 }}
-      />
-      <motion.div 
-        className="fixed top-0 left-0 w-2 h-2 rounded-full bg-cyan-400 z-[9999] pointer-events-none"
-        animate={{ 
-          x: mousePos.x - 4, 
-          y: mousePos.y - 4,
-        }}
-        transition={{ type: 'spring', damping: 30, stiffness: 400, mass: 0.2 }}
-      />
-
+    <div className="min-h-screen bg-black text-white selection:bg-cyan-500 selection:text-black cursor-none overflow-x-hidden">
+      <CustomCursor />
       <Navbar />
       
       <main>
         <Hero />
+        
+        {/* Trusted By / Ticker */}
+        <div className="py-10 border-y border-white/5 bg-black relative overflow-hidden">
+          <div className="flex whitespace-nowrap animate-infinite-scroll">
+            {[1, 2, 3, 4, 5, 6].map(i => (
+              <div key={i} className="flex items-center gap-20 mx-10">
+                <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Scalability</span>
+                <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Efficiency</span>
+                <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Intelligence</span>
+                <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Sovereignty</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <Services />
         <Founder />
+
+        {/* Call to Action */}
+        <section className="py-40 px-6 text-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-cyan-500/5 blur-[100px]" />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="max-w-4xl mx-auto relative z-10"
+          >
+            <h2 className="text-7xl md:text-9xl font-black mb-12 italic tracking-tightest uppercase">
+              Ready to <br /> <span className="text-gradient">Ascend?</span>
+            </h2>
+            <button className="px-16 py-8 bg-cyan-500 text-black rounded-3xl font-black text-3xl hover:scale-105 transition-all shadow-[0_0_60px_rgba(6,182,212,0.3)] italic uppercase">
+              Start Integration
+            </button>
+          </motion.div>
+        </section>
       </main>
 
-      <footer className="py-20 px-6 border-t border-white/5 text-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-white opacity-20" />
+      <footer className="py-20 px-6 border-t border-white/5 text-center relative bg-neutral-950">
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-4xl font-bold tracking-tighter mb-10">EsclaLabs</div>
-          <p className="text-white/40 mb-10 max-w-md mx-auto">
-            Impulsando la frontera tecnológica en finanzas y automatización.
+          <div className="text-5xl font-black tracking-tightest mb-10 italic uppercase">EsclaLabs</div>
+          <div className="w-20 h-1 bg-cyan-500 mx-auto mb-10" />
+          <p className="text-white/40 mb-14 max-w-md mx-auto text-lg font-medium">
+            Architecting the frontier of digital finance and autonomous intelligence.
           </p>
-          <div className="flex justify-center gap-8 text-white/60 mb-10">
-            <a href="#" className="hover:text-white transition-colors">Twitter</a>
-            <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
-            <a href="#" className="hover:text-white transition-colors">Github</a>
+          <div className="flex justify-center gap-10 text-white/30 font-bold uppercase tracking-widest text-xs mb-14">
+            <a href="#" className="hover:text-cyan-400 transition-colors">Twitter</a>
+            <a href="#" className="hover:text-cyan-400 transition-colors">LinkedIn</a>
+            <a href="#" className="hover:text-cyan-400 transition-colors">Github</a>
+            <a href="#" className="hover:text-cyan-400 transition-colors">Contact</a>
           </div>
-          <p className="text-white/20 text-sm">© 2026 EsclaLabs. Designed for the Future. 🧉</p>
+          <p className="text-white/10 text-[10px] font-black uppercase tracking-[0.5em]">
+            © 2026 EsclaLabs. All Rights Reserved. Designed for the Future. 🧉
+          </p>
         </div>
       </footer>
+
+      <style jsx global>{`
+        @keyframes infinite-scroll {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        .animate-infinite-scroll {
+          animation: infinite-scroll 40s linear infinite;
+        }
+      `}</style>
     </div>
   );
 }

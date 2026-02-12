@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Bot, Cpu, TrendingUp, ShieldCheck, Globe, Zap, BarChart3, ChevronRight, Github, Twitter, Linkedin, ExternalLink, Play } from 'lucide-react';
+import { ArrowRight, Bot, Cpu, TrendingUp, ShieldCheck, Globe, Zap, BarChart3, ChevronRight, Github, Twitter, Linkedin, ExternalLink, Play, Mail } from 'lucide-react';
 
 // --- Optimized Custom Cursor ---
 
@@ -19,12 +19,10 @@ const CustomCursor = () => {
     };
 
     const animate = () => {
-      // Smooth interpolation for the large circle
       const lerpCursor = 0.15;
       cursorPos.current.x += (mousePos.current.x - cursorPos.current.x) * lerpCursor;
       cursorPos.current.y += (mousePos.current.y - cursorPos.current.y) * lerpCursor;
 
-      // Faster interpolation for the dot
       const lerpDot = 0.4;
       dotPos.current.x += (mousePos.current.x - dotPos.current.x) * lerpDot;
       dotPos.current.y += (mousePos.current.y - dotPos.current.y) * lerpDot;
@@ -76,7 +74,7 @@ const Navbar = () => {
       className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? 'py-4' : 'py-8'}`}
     >
       <div className="max-w-7xl mx-auto px-6">
-        <div className={`flex items-center justify-between glass-morphism rounded-2xl px-6 py-3 transition-all duration-500 ${scrolled ? 'bg-black/80 backdrop-blur-xl border-white/10' : 'bg-transparent border-transparent'}`}>
+        <div className={`flex items-center justify-between glass-morphism rounded-2xl px-6 py-3 transition-all duration-500 ${scrolled ? 'bg-black/80 backdrop-blur-xl border-white/10 shadow-2xl shadow-cyan-500/10' : 'bg-transparent border-transparent'}`}>
           <div className="flex items-center gap-3 group cursor-pointer">
             <motion.div 
               whileHover={{ rotate: 180 }}
@@ -90,7 +88,7 @@ const Navbar = () => {
           </div>
           
           <div className="hidden md:flex items-center gap-10 text-xs font-bold uppercase tracking-widest">
-            {['Servicios', 'Impacto', 'Nosotros'].map((item) => (
+            {['Servicios', 'Filosofía', 'Nosotros'].map((item) => (
               <a 
                 key={item} 
                 href={`#${item.toLowerCase()}`} 
@@ -100,9 +98,9 @@ const Navbar = () => {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-500 transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
-            <button className="relative group px-6 py-2.5 overflow-hidden rounded-xl bg-white text-black font-black transition-all hover:scale-105 active:scale-95">
+            <button className="relative group px-6 py-2.5 overflow-hidden rounded-xl bg-white text-black font-black transition-all hover:scale-105 active:scale-95 shadow-lg shadow-white/5">
               <span className="relative z-10 flex items-center gap-2">
-                ESTRATEGIA <ChevronRight className="w-4 h-4" />
+                HABLEMOS <ChevronRight className="w-4 h-4" />
               </span>
               <div className="absolute inset-0 bg-cyan-400 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300" />
             </button>
@@ -124,7 +122,7 @@ const Hero = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
-    <section ref={containerRef} className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-black">
+    <section ref={containerRef} className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-black text-center">
       {/* Premium Video Background */}
       <div className="absolute inset-0 z-0">
         <video 
@@ -132,42 +130,42 @@ const Hero = () => {
           muted 
           loop 
           playsInline
-          className="w-full h-full object-cover opacity-40 grayscale"
+          className="w-full h-full object-cover opacity-30 grayscale contrast-125"
         >
           <source src="https://cdn.pixabay.com/video/2021/04/12/70884-537443187_large.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/40 to-black" />
-        <div className="absolute inset-0 bg-grid-white opacity-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_90%)]" />
       </div>
       
       {/* Animated Glows */}
       <motion.div 
         animate={{ 
           scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
+          opacity: [0.2, 0.4, 0.2],
         }}
         transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-500/10 blur-[150px] rounded-full pointer-events-none" 
       />
 
-      <motion.div style={{ y, opacity }} className="relative z-10 max-w-7xl mx-auto px-6 text-center">
+      <motion.div style={{ y, opacity }} className="relative z-10 max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-white/10 glass mb-10 premium-border"
         >
           <span className="w-2 h-2 rounded-full bg-cyan-500 animate-ping" />
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-400">Next Gen Financial Engineering</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-400">Próxima Generación de Ingeniería Financiera</span>
         </motion.div>
 
-        <h1 className="text-7xl md:text-[10rem] font-black tracking-tightest mb-10 leading-[0.8] text-white uppercase italic">
+        <h1 className="text-6xl md:text-[9rem] font-black tracking-tightest mb-10 leading-[0.85] text-white uppercase italic">
           <motion.span 
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
             className="block"
           >
-            Extreme
+            Finanzas
           </motion.span>
           <motion.span 
             initial={{ opacity: 0, x: 50 }}
@@ -175,7 +173,7 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="block text-gradient"
           >
-            Intelligence
+            + IA.
           </motion.span>
         </h1>
 
@@ -185,7 +183,7 @@ const Hero = () => {
           transition={{ duration: 1, delay: 0.5 }}
           className="text-white/60 text-xl md:text-3xl max-w-4xl mx-auto mb-14 leading-tight font-medium"
         >
-          We architect hyper-scalable systems at the intersection of <span className="text-white">Neural Networks</span> and <span className="text-white">On-chain Finance</span>.
+          Arquitectamos sistemas de alta escala uniendo la <span className="text-white">Precisión Contable</span> con el poder de la <span className="text-white">Inteligencia Artificial</span>.
         </motion.p>
 
         <motion.div 
@@ -196,13 +194,13 @@ const Hero = () => {
         >
           <button className="group relative px-12 py-6 bg-white text-black rounded-2xl font-black text-2xl overflow-hidden transition-all hover:shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95 uppercase tracking-tighter italic">
             <span className="relative z-10 flex items-center gap-3">
-              Deploy Protocol <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+              Quiero mi Consultoría <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
             </span>
             <div className="absolute inset-0 bg-cyan-400 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300" />
           </button>
           
           <button className="px-12 py-6 glass rounded-2xl font-black text-2xl hover:bg-white/10 transition-all border border-white/10 active:scale-95 uppercase tracking-tighter italic text-white/70">
-            View Analytics
+            Ver Soluciones
           </button>
         </motion.div>
       </motion.div>
@@ -225,7 +223,7 @@ const ServiceCard = ({ title, desc, icon: Icon, color, delay, image }: any) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, delay }}
-      className="group relative h-[500px] rounded-[3rem] overflow-hidden bg-neutral-950 border border-white/5 premium-border"
+      className="group relative h-[550px] rounded-[3.5rem] overflow-hidden bg-neutral-950 border border-white/5 premium-border"
     >
       <div className="absolute inset-0">
         <img 
@@ -237,11 +235,11 @@ const ServiceCard = ({ title, desc, icon: Icon, color, delay, image }: any) => {
       </div>
       
       <div className="relative h-full p-10 flex flex-col justify-end">
-        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 glass border-white/10 group-hover:scale-110 group-hover:border-cyan-500/50 transition-all duration-500`}>
-          <Icon className="w-6 h-6 text-white" />
+        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 glass border-white/10 group-hover:scale-110 group-hover:border-cyan-500/50 transition-all duration-500 shadow-xl shadow-black/50`}>
+          <Icon className="w-8 h-8 text-white" />
         </div>
         
-        <h3 className="text-4xl font-black mb-4 tracking-tighter uppercase italic text-white">
+        <h3 className="text-4xl font-black mb-4 tracking-tighter uppercase italic text-white leading-none">
           {title}
         </h3>
         
@@ -250,7 +248,7 @@ const ServiceCard = ({ title, desc, icon: Icon, color, delay, image }: any) => {
         </p>
 
         <div className="flex items-center gap-3 text-cyan-400 font-black text-sm uppercase tracking-widest opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-          Init Protocol <ExternalLink className="w-4 h-4" />
+          Activar Protocolo <ExternalLink className="w-4 h-4" />
         </div>
       </div>
     </motion.div>
@@ -261,48 +259,48 @@ const Services = () => {
   return (
     <section id="servicios" className="py-40 px-6 relative bg-black">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-10">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-10 text-right md:text-left">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-cyan-500 font-black uppercase tracking-[0.4em] text-sm block mb-4">Core Capabilities</span>
-            <h2 className="text-6xl md:text-[6rem] font-black leading-[0.8] tracking-tightest uppercase italic">
-              Modular <br />
-              <span className="text-white/20">Solutions.</span>
+            <span className="text-cyan-500 font-black uppercase tracking-[0.4em] text-sm block mb-4">Capacidades Centrales</span>
+            <h2 className="text-6xl md:text-[6.5rem] font-black leading-[0.8] tracking-tightest uppercase italic">
+              Soluciones <br />
+              <span className="text-white/20">Modulares.</span>
             </h2>
           </motion.div>
           
           <motion.p 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-white/40 text-xl max-w-md text-right font-medium"
+            className="text-white/40 text-xl max-w-md md:text-right font-medium"
           >
-            Desplegamos infraestructura de nivel institucional diseñada para la velocidad y la soberanía algorítmica.
+            Desplegamos infraestructura de nivel institucional diseñada para la velocidad y la soberanía algorítmica de tu negocio.
           </motion.p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <ServiceCard 
-            title="Neural Nets" 
-            desc="Modelos de lenguaje y visión entrenados para automatización radical de flujos empresariales."
+            title="AI Orchestration" 
+            desc="Desplegamos agentes inteligentes que manejan tu atención al cliente, ventas y back-office. Automatización total."
             icon={Bot}
-            image="https://images.unsplash.com/photo-1620712943543-bcc4628c6757?auto=format&fit=crop&q=80&w=1000"
+            image="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1000"
             delay={0.1}
           />
           <ServiceCard 
-            title="Yield Engine" 
-            desc="Algoritmos de alta frecuencia para gestión de tesorería y arbitraje en ecosistemas DeFi."
-            icon={TrendingUp}
-            image="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=1000"
+            title="CFO Digital" 
+            desc="Modelos de Machine Learning para predecir tus flujos de caja, optimizar impuestos y análisis de inversión."
+            icon={BarChart3}
+            image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000"
             delay={0.2}
           />
           <ServiceCard 
-            title="Quantum Ops" 
-            desc="Optimización matemática de procesos financieros reduciendo latencia y costos operativos."
-            icon={BarChart3}
-            image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000"
+            title="Web3 Hub" 
+            desc="Estrategias de tesorería en stablecoins, integración de pagos cripto y onboarding seguro al ecosistema DeFi."
+            icon={Globe}
+            image="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=1000"
             delay={0.3}
           />
         </div>
@@ -324,7 +322,7 @@ const Founder = () => {
           className="relative group"
         >
           <div className="absolute inset-0 bg-cyan-500/20 blur-[120px] rounded-full group-hover:bg-cyan-500/30 transition-all duration-700" />
-          <div className="relative aspect-[4/5] rounded-[4rem] overflow-hidden border border-white/10 premium-border">
+          <div className="relative aspect-[4/5] rounded-[4rem] overflow-hidden border border-white/10 premium-border shadow-2xl">
             <img 
               src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=1000" 
               alt="Juan Cristóbal Asís" 
@@ -339,7 +337,7 @@ const Founder = () => {
                  className="h-1 bg-cyan-500 mb-6" 
                />
                <p className="text-5xl font-black italic tracking-tighter uppercase text-white mb-2">J.C. ASÍS</p>
-               <p className="text-cyan-400 font-bold uppercase tracking-[0.2em] text-sm">Visionary / Founder</p>
+               <p className="text-cyan-400 font-bold uppercase tracking-[0.2em] text-sm">Founder & Architect</p>
             </div>
           </div>
         </motion.div>
@@ -350,23 +348,27 @@ const Founder = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-white/20 font-black uppercase tracking-[0.5em] text-xs block mb-8">The Philosophy</span>
+            <span className="text-white/20 font-black uppercase tracking-[0.5em] text-xs block mb-8">El Factor Humano</span>
             <h2 className="text-6xl md:text-7xl font-black mb-10 italic leading-[0.9] tracking-tightest uppercase">
-              Beyond <br />
-              <span className="text-cyan-500">Automation.</span>
+              Maña + <br />
+              <span className="text-cyan-500">Ingeniería.</span>
             </h2>
             <p className="text-white/50 text-2xl leading-relaxed mb-14 font-medium italic">
               "No estamos construyendo solo software, estamos diseñando la infraestructura de la próxima década donde la IA y el capital son indistinguibles."
             </p>
             
+            <p className="text-white/40 text-lg mb-14 leading-relaxed">
+              Juan Cristóbal Asís es Contador Público (2015) con un ADN puramente tecnológico. Resolutivo por naturaleza, navega el ecosistema Cripto desde 2017 y hoy lidera el desarrollo de agentes de IA aplicados a la rentabilidad empresarial.
+            </p>
+
             <div className="grid grid-cols-2 gap-10 mb-14">
               <div>
                 <p className="text-4xl font-black text-white mb-2 italic">2017</p>
-                <p className="text-white/30 uppercase text-xs tracking-widest font-bold">Inception on-chain</p>
+                <p className="text-white/30 uppercase text-[10px] tracking-widest font-bold">Incepción On-chain</p>
               </div>
               <div>
-                <p className="text-4xl font-black text-white mb-2 italic">40M+</p>
-                <p className="text-white/30 uppercase text-xs tracking-widest font-bold">Assets Optimized</p>
+                <p className="text-4xl font-black text-white mb-2 italic">1k+</p>
+                <p className="text-white/30 uppercase text-[10px] tracking-widest font-bold">Lotes Gestionados</p>
               </div>
             </div>
             
@@ -376,7 +378,7 @@ const Founder = () => {
                   key={i}
                   whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.1)' }}
                   href="#" 
-                  className="w-16 h-16 rounded-2xl glass flex items-center justify-center border-white/5 transition-all"
+                  className="w-16 h-16 rounded-2xl glass flex items-center justify-center border-white/5 transition-all shadow-lg"
                 >
                   <Icon className="w-6 h-6 text-white" />
                 </motion.a>
@@ -398,21 +400,42 @@ export default function LandingPage() {
       <main>
         <Hero />
         
-        {/* Trusted By / Ticker */}
+        {/* Ticker Infinito */}
         <div className="py-10 border-y border-white/5 bg-black relative overflow-hidden">
           <div className="flex whitespace-nowrap animate-infinite-scroll">
             {[1, 2, 3, 4, 5, 6].map(i => (
               <div key={i} className="flex items-center gap-20 mx-10">
-                <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Scalability</span>
-                <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Efficiency</span>
-                <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Intelligence</span>
-                <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Sovereignty</span>
+                <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Maña</span>
+                <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Eficiencia</span>
+                <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Resolución</span>
+                <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Soberanía</span>
+                <span className="text-2xl font-black text-white/10 uppercase italic tracking-widest">Escalabilidad</span>
               </div>
             ))}
           </div>
         </div>
 
         <Services />
+        
+        {/* Filosofía / Middle Section */}
+        <section className="py-40 px-6 bg-white/[0.01]">
+          <div className="max-w-4xl mx-auto text-center">
+             <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              className="mb-10 inline-block p-4 rounded-3xl bg-cyan-500/5 border border-cyan-500/20 shadow-inner shadow-cyan-500/10"
+             >
+                <Bot className="w-16 h-16 text-cyan-500" />
+             </motion.div>
+             <h2 className="text-4xl md:text-7xl font-black mb-10 uppercase italic tracking-tighter">
+                Cambiamos <span className="text-cyan-500">Horas Culo</span> por <span className="text-white">Algoritmos.</span>
+             </h2>
+             <p className="text-white/40 text-xl md:text-2xl leading-relaxed font-medium">
+                No vendemos software, vendemos el final de la burocracia. Si un bot puede hacerlo mejor, más rápido y sin quejarse, EsclaLabs lo construye.
+             </p>
+          </div>
+        </section>
+
         <Founder />
 
         {/* Call to Action */}
@@ -423,11 +446,11 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, scale: 1 }}
             className="max-w-4xl mx-auto relative z-10"
           >
-            <h2 className="text-7xl md:text-9xl font-black mb-12 italic tracking-tightest uppercase">
-              Ready to <br /> <span className="text-gradient">Ascend?</span>
+            <h2 className="text-7xl md:text-[9rem] font-black mb-12 italic tracking-tightest uppercase leading-[0.8]">
+              ¿Listo para <br /> <span className="text-gradient">Ascender?</span>
             </h2>
-            <button className="px-16 py-8 bg-cyan-500 text-black rounded-3xl font-black text-3xl hover:scale-105 transition-all shadow-[0_0_60px_rgba(6,182,212,0.3)] italic uppercase">
-              Start Integration
+            <button className="px-16 py-8 bg-cyan-500 text-black rounded-3xl font-black text-3xl hover:scale-105 transition-all shadow-[0_0_60px_rgba(6,182,212,0.3)] italic uppercase flex items-center gap-6 mx-auto">
+              Iniciar Integración <Mail className="w-8 h-8" />
             </button>
           </motion.div>
         </section>
@@ -438,16 +461,16 @@ export default function LandingPage() {
           <div className="text-5xl font-black tracking-tightest mb-10 italic uppercase">EsclaLabs</div>
           <div className="w-20 h-1 bg-cyan-500 mx-auto mb-10" />
           <p className="text-white/40 mb-14 max-w-md mx-auto text-lg font-medium">
-            Architecting the frontier of digital finance and autonomous intelligence.
+            Arquitectando la frontera de las finanzas digitales y la inteligencia autónoma.
           </p>
           <div className="flex justify-center gap-10 text-white/30 font-bold uppercase tracking-widest text-xs mb-14">
             <a href="#" className="hover:text-cyan-400 transition-colors">Twitter</a>
             <a href="#" className="hover:text-cyan-400 transition-colors">LinkedIn</a>
             <a href="#" className="hover:text-cyan-400 transition-colors">Github</a>
-            <a href="#" className="hover:text-cyan-400 transition-colors">Contact</a>
+            <a href="#" className="hover:text-cyan-400 transition-colors">Contacto</a>
           </div>
           <p className="text-white/10 text-[10px] font-black uppercase tracking-[0.5em]">
-            © 2026 EsclaLabs. All Rights Reserved. Designed for the Future. 🧉
+            © 2026 EsclaLabs. Todos los derechos reservados. Diseñado para el futuro. 🧉
           </p>
         </div>
       </footer>
@@ -459,6 +482,50 @@ export default function LandingPage() {
         }
         .animate-infinite-scroll {
           animation: infinite-scroll 40s linear infinite;
+        }
+        .text-gradient {
+          background: linear-gradient(to right, #06b6d4, #3b82f6, #8b5cf6);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        .premium-border {
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        .glass-morphism {
+          background: rgba(0, 0, 0, 0.4);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .custom-cursor {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 32px;
+          height: 32px;
+          border: 1px solid rgba(6, 182, 212, 0.5);
+          border-radius: 50%;
+          pointer-events: none;
+          z-index: 9999;
+          transform: translate3d(var(--cursor-x), var(--cursor-y), 0);
+          transition: width 0.3s, height 0.3s, background-color 0.3s;
+          mix-blend-mode: difference;
+        }
+        .custom-cursor-dot {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 6px;
+          height: 6px;
+          background-color: #06b6d4;
+          border-radius: 50%;
+          pointer-events: none;
+          z-index: 9999;
+          transform: translate3d(var(--dot-x), var(--dot-y), 0);
+        }
+        h1, h2, h3, button {
+          letter-spacing: -0.05em !important;
         }
       `}</style>
     </div>

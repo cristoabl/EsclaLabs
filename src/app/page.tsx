@@ -77,8 +77,8 @@ const Navbar = () => {
       animate={{ y: 0 }}
       className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? 'py-4' : 'py-8'}`}
     >
-      <div className="max-w-7xl mx-auto px-6 text-white font-sans">
-        <div className={`flex items-center justify-between rounded-2xl px-6 py-3 transition-all duration-500 ${scrolled ? 'bg-black/80 backdrop-blur-xl border border-white/10 shadow-2xl shadow-cyan-500/10' : 'bg-transparent border-transparent'}`}>
+      <div className="max-w-7xl mx-auto px-6 text-white font-sans font-bold">
+        <div className={`flex items-center justify-between rounded-2xl px-6 py-3 transition-all duration-500 ${scrolled ? 'bg-black/80 backdrop-blur-xl border border-white/10 shadow-2xl' : 'bg-transparent border-transparent'}`}>
           <div className="flex items-center gap-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <div className="w-10 h-10 bg-cyan-500 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:rotate-180 transition-transform duration-500 text-black">
               <Cpu className="w-6 h-6" />
@@ -111,34 +111,21 @@ export default function LandingPage() {
   
   const { scrollYProgress } = useScroll();
 
-  // CLEAN NON-OVERLAPPING HERO TRANSITIONS
-  // Section 1: Intro [0 -> 0.3]
-  const opacity1 = useTransform(scrollYProgress, [0, 0.25, 0.3], [1, 1, 0]);
-  const y1 = useTransform(scrollYProgress, [0, 0.3], [0, -100]);
-  
-  // Section 2: Efficiency [0.35 -> 0.65]
-  const opacity2 = useTransform(scrollYProgress, [0.35, 0.45, 0.6, 0.65], [0, 1, 1, 0]);
-  const y2 = useTransform(scrollYProgress, [0.35, 0.45, 0.6, 0.65], [100, 0, 0, -100]);
-  
-  // Section 3: CTA [0.7 -> 1.0]
-  const opacity3 = useTransform(scrollYProgress, [0.7, 0.8, 1], [0, 1, 1]);
-  const y3 = useTransform(scrollYProgress, [0.7, 0.8], [100, 0]);
-  
-  const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
-
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
     const unsubscribe = scrollYProgress.on("change", (progress) => {
       if (video.duration && !isNaN(video.duration)) {
-        targetTimeRef.current = progress * video.duration;
+        // Tie video playback to the FIRST 50% of page scroll for more impact in hero
+        const factor = Math.min(progress * 2, 1);
+        targetTimeRef.current = factor * video.duration;
       }
     });
 
     const render = () => {
       const diff = targetTimeRef.current - currentTimeRef.current;
-      currentTimeRef.current += diff * 0.08; // Slightly slower/smoother
+      currentTimeRef.current += diff * 0.1;
       if (video && !isNaN(currentTimeRef.current)) {
         video.currentTime = currentTimeRef.current;
       }
@@ -157,67 +144,64 @@ export default function LandingPage() {
       <CustomCursor />
       <Navbar />
 
-      {/* FIXED GLOBAL BACKGROUND VIDEO */}
+      {/* FIXED GLOBAL BACKGROUND VIDEO - IMPROVED VISIBILITY */}
       <div className="fixed inset-0 w-full h-full z-0 overflow-hidden bg-black">
         <video
           ref={videoRef}
           muted
           playsInline
           preload="auto"
-          className="w-full h-full object-cover grayscale opacity-80 contrast-125 scale-105"
+          className="w-full h-full object-cover grayscale opacity-100 contrast-125 scale-105"
           src="/bg.mp4"
         />
-        {/* Darker overlays only at the very top and very bottom for legibility */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80" />
+        {/* Subtle dark gradient to ensure text readability without hiding the video */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/10 to-black/90" />
       </div>
       
-      <main className="relative z-10">
-        {/* HERO SECTION - Height adjusted for clear transitions */}
-        <section className="relative h-[600vh] flex items-center justify-center">
-          <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden px-6">
-            
-            {/* Intro Content */}
-            <motion.div style={{ opacity: opacity1, y: y1 }} className="absolute text-center max-w-5xl pointer-events-none">
+      <main className="relative z-10 font-sans">
+        
+        {/* SECTION 1: HERO INTRO */}
+        <section className="relative min-h-screen flex items-center justify-center px-6">
+           <motion.div 
+             initial={{ opacity: 0, y: 30 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             className="text-center max-w-5xl"
+           >
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-500/20 bg-cyan-500/5 mb-8 shadow-2xl backdrop-blur-md">
                 <Zap className="w-3 h-3 text-cyan-500" />
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-400">EsclaLabs v2.1.5</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-400">EsclaLabs v2.1.6</span>
               </div>
-              <h1 className="text-6xl md:text-[10rem] font-black leading-[0.8] tracking-tightest uppercase italic text-white drop-shadow-2xl">
+              <h1 className="text-6xl md:text-[9.5rem] font-black leading-[0.8] tracking-tightest uppercase italic text-white drop-shadow-2xl">
                 EL FUTURO <br /> ES <span className="text-cyan-500">ALGORÍTMICO.</span>
               </h1>
               <p className="mt-10 text-white/50 text-xl font-medium uppercase tracking-widest italic">Ingeniería para la nueva economía</p>
-            </motion.div>
-
-            {/* Efficiency Content */}
-            <motion.div style={{ opacity: opacity2, y: y2 }} className="absolute text-center max-w-4xl pointer-events-none">
-              <h2 className="text-5xl md:text-8xl font-black uppercase italic tracking-tighter text-white mb-8 drop-shadow-2xl">
-                MAÑA <span className="text-cyan-500">+</span> INGENIERÍA.
-              </h2>
-              <p className="text-white/80 text-xl md:text-3xl font-medium italic leading-tight bg-black/50 backdrop-blur-xl p-8 rounded-[2rem] border border-white/10 shadow-2xl">
-                Liquidamos la burocracia. <br /> Construimos la infraestructura <br /> que tu rentabilidad merece.
-              </p>
-            </motion.div>
-
-            {/* CTA Content */}
-            <motion.div style={{ opacity: opacity3, y: y3 }} className="absolute text-center max-w-4xl flex flex-col items-center">
-              <h2 className="text-6xl md:text-[9rem] font-black uppercase italic tracking-tightest text-white mb-12 leading-none drop-shadow-2xl">
-                ¿LISTO PARA <br /> <span className="text-gradient text-glow">ASCENDER?</span>
-              </h2>
-              <a href="https://www.linkedin.com/in/cristobal-asis-485ab9122/" target="_blank" className="pointer-events-auto px-16 py-8 bg-cyan-500 text-black rounded-3xl font-black text-3xl hover:scale-105 transition-all shadow-[0_0_60px_rgba(6,182,212,0.5)] italic uppercase">
-                Iniciar Integración
-              </a>
-            </motion.div>
-
-            <motion.div style={{ opacity: scrollIndicatorOpacity }} className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60">
-              <span className="text-[10px] font-black uppercase tracking-[0.4em]">Deslizá</span>
-              <ChevronDown className="w-5 h-5 animate-bounce text-cyan-500" />
-            </motion.div>
-          </div>
+              <div className="mt-16 flex flex-col items-center gap-4 text-white/30 font-bold uppercase tracking-[0.4em]">
+                <span className="text-[10px]">Deslizá para explorar</span>
+                <ChevronDown className="w-6 h-6 animate-bounce text-cyan-500" />
+              </div>
+           </motion.div>
         </section>
 
-        {/* Services Section */}
-        <section id="servicios" className="relative py-40 px-6 bg-black/80 backdrop-blur-2xl border-y border-white/5 shadow-[0_0_100px_rgba(0,0,0,1)]">
-          <div className="max-w-7xl mx-auto">
+        {/* SECTION 2: THE MAÑA PHILOSOPHY */}
+        <section id="filosofia" className="relative min-h-screen flex items-center justify-center px-6 bg-black/40 backdrop-blur-[2px]">
+           <motion.div 
+             initial={{ opacity: 0, y: 30 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ margin: "-100px" }}
+             className="text-center max-w-4xl"
+           >
+              <h2 className="text-5xl md:text-9xl font-black uppercase italic tracking-tighter text-white mb-12 drop-shadow-2xl">
+                MAÑA <span className="text-cyan-500">+</span> INGENIERÍA.
+              </h2>
+              <p className="text-white/80 text-xl md:text-3xl font-medium italic leading-tight bg-black/60 backdrop-blur-xl p-10 rounded-[3rem] border border-white/10 shadow-2xl shadow-cyan-500/5">
+                Liquidamos la burocracia. <br /> Construimos la infraestructura <br /> que tu rentabilidad merece.
+              </p>
+           </motion.div>
+        </section>
+
+        {/* SECTION 3: CORE CAPABILITIES */}
+        <section id="servicios" className="relative py-40 px-6 bg-black border-y border-white/5 shadow-[0_0_100px_rgba(0,0,0,1)]">
+          <div className="max-w-7xl mx-auto font-sans">
             <div className="mb-24 flex flex-col md:flex-row justify-between items-end gap-10">
                <div className="text-left text-white">
                   <span className="text-cyan-500 font-black uppercase tracking-[0.4em] text-sm block mb-4">Core Capabilities</span>
@@ -249,22 +233,22 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Founder Section */}
-        <section id="nosotros" className="relative py-40 px-6 bg-black border-b border-white/5">
-          <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-24 items-center">
+        {/* SECTION 4: THE FOUNDER */}
+        <section id="nosotros" className="relative py-40 px-6 bg-black/60 backdrop-blur-md border-b border-white/5">
+          <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-24 items-center font-sans">
             <div className="relative group">
               <div className="absolute inset-0 bg-cyan-500/10 blur-[100px] rounded-full group-hover:bg-cyan-500/20 transition-all" />
               <div className="relative aspect-[4/5] rounded-[4rem] overflow-hidden border border-white/10 shadow-2xl">
                 <img src="/founder.jpg" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt="J.C. Asís" />
                 <div className="absolute bottom-10 left-10 text-left text-white">
                   <p className="text-5xl font-black italic uppercase leading-none mb-2">J.C. ASÍS</p>
-                  <p className="text-cyan-400 font-bold uppercase tracking-[0.2em] text-sm italic text-glow">Founder & Architect</p>
+                  <p className="text-cyan-400 font-bold uppercase tracking-[0.2em] text-sm italic">Founder & Architect</p>
                 </div>
               </div>
             </div>
             <div className="text-left text-white">
-              <span className="text-white/20 font-black uppercase tracking-[0.5em] text-xs block mb-8 underline decoration-white/10 underline-offset-8">Incepción</span>
-              <h2 className="text-6xl md:text-7xl font-black mb-10 italic uppercase leading-[0.9]">Maña + <br /> <span className="text-cyan-500 text-glow">Ingeniería.</span></h2>
+              <span className="text-white/20 font-black uppercase tracking-[0.5em] text-xs block mb-8 underline decoration-white/10 underline-offset-8 font-sans">Biografía</span>
+              <h2 className="text-6xl md:text-7xl font-black mb-10 italic uppercase leading-[0.9] tracking-tighter">Maña + <br /> <span className="text-cyan-500 text-glow">Ingeniería.</span></h2>
               <p className="text-white/40 text-xl leading-relaxed mb-10 italic font-medium">
                 Juan Cristóbal Asís es Contador Público con ADN tecnológico. Resolutivo por naturaleza, navega el ecosistema Cripto desde 2017 y lidera EsclaLabs.
               </p>
@@ -279,16 +263,33 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+
+        {/* SECTION 5: CTA */}
+        <section className="relative py-60 px-6 text-center overflow-hidden bg-black/40 backdrop-blur-sm">
+          <div className="absolute inset-0 bg-cyan-500/5 blur-[100px]" />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="max-w-4xl mx-auto relative z-10"
+          >
+            <h2 className="text-7xl md:text-[9.5rem] font-black mb-12 italic tracking-tightest uppercase leading-[0.8]">
+              ¿LISTO PARA <br /> <span className="text-gradient">ASCENDER?</span>
+            </h2>
+            <a href="https://www.linkedin.com/in/cristobal-asis-485ab9122/" target="_blank" className="px-16 py-8 bg-cyan-500 text-black rounded-3xl font-black text-3xl hover:scale-105 transition-all shadow-[0_0_60px_rgba(6,182,212,0.4)] italic uppercase flex items-center gap-6 mx-auto w-fit leading-none">
+              Iniciar Integración <ArrowRight className="w-8 h-8" />
+            </a>
+          </motion.div>
+        </section>
       </main>
 
-      <footer className="relative z-20 py-20 px-6 text-center bg-black">
+      <footer className="relative z-20 py-20 px-6 text-center bg-black border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="text-4xl font-black italic uppercase mb-10 tracking-tightest text-white">EsclaLabs</div>
           <div className="w-20 h-1 bg-cyan-500 mx-auto mb-10 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.5)]" />
           <p className="text-white/30 text-xs max-w-md mx-auto mb-10 leading-relaxed italic font-medium uppercase tracking-widest">
-            Architecting the frontier of digital finance. v2.1.5
+            Architecting the frontier of digital finance. v2.1.6
           </p>
-          <p className="text-white/5 text-[8px] font-black uppercase tracking-[0.8em] mt-20 italic">© 2026 EsclaLabs. Todos los derechos reservados. 🧉</p>
+          <p className="text-white/5 text-[8px] font-black uppercase tracking-[0.8em] mt-20 italic">© 2026 EsclaLabs. 🧉</p>
         </div>
       </footer>
 

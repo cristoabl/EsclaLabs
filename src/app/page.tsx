@@ -324,7 +324,7 @@ const Founder = () => {
           <div className="absolute inset-0 bg-cyan-500/20 blur-[120px] rounded-full group-hover:bg-cyan-500/30 transition-all duration-700" />
           <div className="relative aspect-[4/5] rounded-[4rem] overflow-hidden border border-white/10 premium-border shadow-2xl">
             <img 
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=1000" 
+              src="/founder.jpg" 
               alt="Juan Cristóbal Asís" 
               className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
             />

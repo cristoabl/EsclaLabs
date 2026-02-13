@@ -65,8 +65,8 @@ const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
     setStatus('sending');
     const formData = new FormData(e.currentTarget);
     
-    // Usamos Formspree para ocultar el email en el código y asegurar que llegue
-    const response = await fetch('https://formspree.io/f/mayrrjww', { // TODO: Cambiar por ID real del Jefe
+    // Usamos FormSubmit para mayor confiabilidad inicial
+    const response = await fetch('https://formsubmit.co/ajax/cristobaldefy@gmail.com', {
       method: 'POST',
       body: formData,
       headers: { 'Accept': 'application/json' }
